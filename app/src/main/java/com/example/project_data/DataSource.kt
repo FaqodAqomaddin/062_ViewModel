@@ -1,4 +1,4 @@
-package Data
+package com.example.project_data
 
 import com.example.project_data.R
 
