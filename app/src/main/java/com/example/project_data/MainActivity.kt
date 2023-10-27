@@ -1,6 +1,5 @@
 package com.example.project_data
 
-import Data.DataForm
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -39,10 +38,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import Data.DataSource.jenis
-import androidx.lifecycle.ViewModel
+import com.example.project_data.DataSource.jenis
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.project_data.ui.theme.Project_DataTheme
 
 class MainActivity : ComponentActivity() {
@@ -118,6 +115,8 @@ fun TampilForm( cobaViewModel: CobaViewModel = viewModel()) {
 
     var textNama by remember { mutableStateOf("")}
     var textTlp by remember { mutableStateOf("")}
+    var textEmail by remember { mutableStateOf("")}
+    var textalamat by remember { mutableStateOf("")}
 
     val context = LocalContext.current
     val dataForm: DataForm
@@ -145,13 +144,34 @@ fun TampilForm( cobaViewModel: CobaViewModel = viewModel()) {
             textTlp = it
         }
     )
+    OutlinedTextField(
+        value =textEmail,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = {Text(text = "Email")},
+        onValueChange = {
+            textEmail = it
+        }
+    )
+    OutlinedTextField(
+        value =textalamat,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = {Text(text = "Alamat")},
+        onValueChange = {
+            textalamat = it
+        }
+    )
+
     pilihJK(
         option = jenis.map {id -> context.resources.getString(id)},
         onSelectionChange = { cobaViewModel.setJenisK(it)})
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            cobaViewModel.insertData(textNama,textTlp,dataForm.sex)
+            cobaViewModel.insertData(textNama,textTlp,textEmail,textalamat,dataForm.sex)
         }
     ) {
         Text(
@@ -163,12 +183,15 @@ fun TampilForm( cobaViewModel: CobaViewModel = viewModel()) {
     TextHasil(
         namanya = cobaViewModel.namaUsr,
         telponnya = cobaViewModel.noTlp,
-        jenisnya = cobaViewModel.jenisKl
+        jenisnya = cobaViewModel.jenisKl,
+        emailnya = cobaViewModel.email,
+        alamatnya = cobaViewModel.alamat
+
     )
 }
 
 @Composable
-fun TextHasil(namanya: String, telponnya: String, jenisnya: String) {
+fun TextHasil(namanya: String, telponnya: String, jenisnya: String, emailnya: String, alamatnya: String) {
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -185,6 +208,13 @@ fun TextHasil(namanya: String, telponnya: String, jenisnya: String) {
         )
         Text(
             text = "Jenis Kelamin : " + jenisnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Email : " + emailnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+        Text(text = "Alamat : " + alamatnya,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
         )
     }
